@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Stock Price Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Advanced Stock Price Predictor</h1>
+            <p>AI-powered stock analysis with technical indicators and market insights</p>
+        </header>
+
+        <div class="search-section">
+            <form method="POST" action="/" class="search-form">
+                <div class="form-group">
+                    <input type="text" name="symbol" placeholder="Enter stock symbol (e.g., AAPL)" required>
+                    <button type="submit">Analyze Stock</button>
+                </div>
+            </form>
+        </div>
+
+        {% if error %}
+        <div class="error-message">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        {% if prediction %}
+        <div class="results-section">
+            <h2>Analysis Results for {{ symbol }}</h2>
+            
+            <div class="prediction-summary">
+                <div class="summary-card">
+                    <h3>Current Price</h3>
+                    <p class="price">{{ prediction.last_price }}</p>
+                </div>
+                <div class="summary-card">
+                    <h3>Predicted Price</h3>
+                    <p class="price">{{ prediction.predicted_price }}</p>
+                </div>
+                <div class="summary-card">
+                    <h3>Expected Change</h3>
+                    <p class="change">{{ prediction.price_change }}</p>
+                </div>
+                <div class="summary-card">
+                    <h3>Signal</h3>
+                    <p class="signal {{ prediction.signal.lower() }}">{{ prediction.signal }}</p>
+                </div>
+                <div class="summary-card">
+                    <h3>Model Accuracy</h3>
+                    <p class="accuracy">{{ prediction.accuracy }}</p>
+                </div>
+            </div>
+
+            <div class="technical-analysis">
+                <h3>Technical Analysis</h3>
+                <div class="analysis-grid">
+                    <div class="analysis-card">
+                        <h4>Market Trend</h4>
+                        <p class="trend-{{ prediction.analysis.Trend.lower() }}">{{ prediction.analysis.Trend }}</p>
+                    </div>
+                    <div class="analysis-card">
+                        <h4>RSI Signal</h4>
+                        <p class="signal-{{ prediction.analysis.RSI.lower() }}">{{ prediction.analysis.RSI }}</p>
+                    </div>
+                    <div class="analysis-card">
+                        <h4>MACD</h4>
+                        <p class="signal-{{ prediction.analysis.MACD.lower() }}">{{ prediction.analysis.MACD }}</p>
+                    </div>
+                    <div class="analysis-card">
+                        <h4>Bollinger Bands</h4>
+                        <p class="signal-{{ prediction.analysis.Bollinger.lower() }}">{{ prediction.analysis.Bollinger }}</p>
+                    </div>
+                    <div class="analysis-card">
+                        <h4>Volume</h4>
+                        <p class="volume-{{ prediction.analysis.Volume.lower() }}">{{ prediction.analysis.Volume }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <div id="price-chart"></div>
+            </div>
+        </div>
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var plotData = {{ plot | safe }};
+                Plotly.newPlot('price-chart', plotData.data, plotData.layout);
+            });
+        </script>
+        {% endif %}
+
+        <footer>
+            <p>Powered by Advanced Machine Learning and Technical Analysis</p>
+        </footer>
+    </div>
+</body>
+</html> 
