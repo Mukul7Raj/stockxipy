@@ -1,6 +1,3 @@
-To add a README file to your project, I can guide you through creating one. A README file typically includes an overview of the project, setup instructions, usage examples, and any other relevant information. Here's a suggested structure for your README:
-
----
 
 ### StockxiPy
 
